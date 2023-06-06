@@ -22,11 +22,7 @@ export default {
       const csrfToken = await reply.generateCsrf();
       request.session.csrfToken = csrfToken;
 
-      reply.send({
-        message: "Login Success",
-        csrf: csrfToken,
-        session: request.session,
-      });
+      reply.redirect("/posts");
     } catch (error) {
       console.log(error);
       reply.code(500).send({
@@ -52,7 +48,7 @@ export default {
         type: "local",
       });
 
-      reply.send({ message: "Signup Success", user: newUser });
+      reply.redirect("/posts");
     } catch (error) {
       console.log(error);
       reply.code(500).send({

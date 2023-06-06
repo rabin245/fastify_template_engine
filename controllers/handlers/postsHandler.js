@@ -11,7 +11,7 @@ export default {
       if (posts.length === 0) {
         reply.code(200).send({ error: "No posts found" });
       }
-      return posts;
+      await reply.view("posts.ejs", { posts });
     } catch (error) {
       console.log(error);
       reply.code(500).send({ error: "Internal Server Error" });
