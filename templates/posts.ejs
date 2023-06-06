@@ -1,6 +1,9 @@
 <div class="post-page">
   <h1>Posts</h1>
   <div class="posts">
+    <span>
+      <%= posts.length===0 ? "No posts yet" : "" %>
+    </span>
     <% posts.map(post=> { %>
       <a href="/posts/<%=post.id%>">
         <div class="card">

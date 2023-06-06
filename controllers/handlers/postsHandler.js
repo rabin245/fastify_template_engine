@@ -9,7 +9,7 @@ export default {
       });
 
       if (posts.length === 0) {
-        reply.code(200).send({ error: "No posts found" });
+        reply.view("posts.ejs", { posts });
       }
       await reply.view("posts.ejs", { posts });
     } catch (error) {
@@ -50,7 +50,7 @@ export default {
       });
 
       if (posts.length === 0) {
-        reply.code(200).send({ error: "No posts found" });
+        reply.view("posts.ejs", { posts });
       }
 
       await reply.view("posts.ejs", { posts });

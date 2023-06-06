@@ -48,7 +48,7 @@ export default {
         type: "local",
       });
 
-      reply.redirect("/posts");
+      reply.redirect("/auth/login");
     } catch (error) {
       console.log(error);
       reply.code(500).send({
