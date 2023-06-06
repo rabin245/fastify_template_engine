@@ -4,6 +4,6 @@ export default async function (fastify, opts) {
     console.log("logging session userid", request.session.userId);
     console.log("logging the test cookie", request.cookies);
 
-    return { root: true, session: request.session };
+    await reply.view("index.ejs", { test: "message" });
   });
 }
