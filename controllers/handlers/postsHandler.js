@@ -37,6 +37,28 @@ export default {
       reply.code(500).send({ error: "Internal Server Error" });
     }
   },
+  getPostsByUser: async (request, reply) => {
+    const Post = request.server.Post;
+    const User = request.server.User;
+
+    const userId = request.user.id;
+
+    try {
+      const posts = await Post.findAll({
+        where: { userId: userId },
+        include: User,
+      });
+
+      if (posts.length === 0) {
+        reply.code(200).send({ error: "No posts found" });
+      }
+
+      await reply.view("posts.ejs", { posts });
+    } catch (error) {
+      console.log(error);
+      reply.code(500).send({ error: "Internal Server Error" });
+    }
+  },
   createPost: async (request, reply) => {
     const Post = request.server.Post;
     const { title, content } = request.body;

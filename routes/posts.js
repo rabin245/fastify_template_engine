@@ -15,6 +15,11 @@ export default async function (fastify, opts) {
     handler: postsHandler.getPostById,
   };
 
+  const getPostsByUserOption = {
+    preHandler: fastify.authenticate,
+    handler: postsHandler.getPostsByUser,
+  };
+
   const createPostOption = {
     schema: postsSchema.createPost,
     preHandler: fastify.authenticate,
@@ -36,6 +41,8 @@ export default async function (fastify, opts) {
   fastify.get("/posts", getPostsOption);
 
   fastify.get("/posts/:id", getPostsByIdOption);
+
+  fastify.get("/posts/me", getPostsByUserOption);
 
   fastify.post("/posts", createPostOption);
 
