@@ -145,4 +145,5 @@ ul.nav li a:hover {
 .auth-form--error {
   color: red;
   font-weight: 300;
+  text-align: center;
 }

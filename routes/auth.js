@@ -30,6 +30,12 @@ export default async function (fastify, opts) {
     });
   });
 
+  fastify.get("/auth/signup", async (req, reply) => {
+    await reply.view("signup.ejs", {
+      errorMsg: "",
+    });
+  });
+
   fastify.post("/auth/login", loginOption);
   fastify.post("/auth/signup", signupOption);
   fastify.post("/auth/logout", logoutOption);

@@ -7,14 +7,14 @@ export default {
     try {
       const user = await User.findOne({ where: { username } });
       if (!user)
-        await reply.view("/login.ejs", {
+        await reply.view("login.ejs", {
           errorMsg: "Incorrect username or password",
         });
 
       const match = await bcrypt.compare(password, user.password);
 
       if (!match)
-        await reply.view("/login.ejs", {
+        await reply.view("login.ejs", {
           errorMsg: "Incorrect username or password",
         });
 
@@ -41,7 +41,7 @@ export default {
 
     try {
       const user = await User.findOne({ where: { username } });
-      if (user) reply.code(409).send({ error: "User already exists" });
+      if (user) reply.view("signup.ejs", { errorMsg: "User already exists" });
 
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
