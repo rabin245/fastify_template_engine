@@ -28,10 +28,10 @@ export default {
       });
 
       if (!post) {
-        reply.code(404).send({ error: "Not Found" });
+        await reply.view("pageNotFound.ejs");
       }
 
-      return post;
+      await reply.view("post.ejs", { post, user: request.user });
     } catch (error) {
       console.log(error);
       reply.code(500).send({ error: "Internal Server Error" });

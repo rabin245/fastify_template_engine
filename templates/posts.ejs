@@ -2,14 +2,19 @@
   <h1>Posts</h1>
   <div class="posts">
     <% posts.map(post=> { %>
-      <div class="card">
-        <h3>
-          <%= post.title %>
-        </h3>
-        <p>
-          <%= post.content %>
-        </p>
-      </div>
+      <a href="/posts/<%=post.id%>">
+        <div class="card">
+          <h2 class="post--title">
+            <%= post.title %>
+          </h2>
+          <span class="post--author">
+            by <%= post.user.username %>
+          </span>
+          <p class="post--content">
+            <%= post.content %>
+          </p>
+        </div>
+      </a>
       <% }); %>
   </div>
 </div>
