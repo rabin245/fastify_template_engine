@@ -1,0 +1,14 @@
+<div>
+  <h2>Login</h2>
+  <form class="auth-form" action="/auth/login" method="POST">
+    <input class="inputfield" type="text" name="username" placeholder="Username" pattern="^[A-Za-z0-9]{2,}$"
+      title="Must be at least two characters" />
+    <input class="inputfield" type="password" name="password" placeholder="Password" pattern="^[A-Za-z0-9_%+-]{2,}$"
+      title="Must be at least two characters" />
+    <span class="auth-form--error">
+      <%= errorMsg %>
+    </span>
+    <button class="auth-button" type="submit">Login</button>
+  </form>
+  <p>Don't have an account? <a href="/auth/signup">Signup</a></p>
+</div>

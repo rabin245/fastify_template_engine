@@ -7,12 +7,16 @@ export default {
     try {
       const user = await User.findOne({ where: { username } });
       if (!user)
-        reply.code(404).send({ error: "Incorrect username or password" });
+        await reply.view("/login.ejs", {
+          errorMsg: "Incorrect username or password",
+        });
 
       const match = await bcrypt.compare(password, user.password);
 
       if (!match)
-        reply.code(401).send({ error: "Incorrect username or password" });
+        await reply.view("/login.ejs", {
+          errorMsg: "Incorrect username or password",
+        });
 
       request.session.userId = user.id;
       const csrfToken = await reply.generateCsrf();
