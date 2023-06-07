@@ -38,6 +38,8 @@ export default {
     const User = request.server.User;
     const { username, email, password } = request.body;
 
+    const mailer = request.server.mailer;
+
     try {
       const user = await User.findOne({ where: { email } });
       if (user) reply.view("signup.ejs", { errorMsg: "User already exists" });
@@ -50,6 +52,19 @@ export default {
         email,
         password: hashedPassword,
         type: "local",
+      });
+
+      mailer.sendMail({
+        to: email,
+        subject: "Welcome to EJS Posts",
+        html: `
+          <p>Hi ${username},</p>
+          
+          <p>Thank you for signing up to EJS Posts. If you did not sign up, please ignore this email.</p>
+
+          <p>Regards,</p>
+          <p>EJS Posts Team</p>
+          `,
       });
 
       reply.redirect("/auth/login");
