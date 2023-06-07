@@ -1,11 +1,16 @@
 import bcrypt from "bcrypt";
+import { Op } from "sequelize";
 
 export default {
   login: async (request, reply) => {
     const User = request.server.User;
     const { username, password } = request.body;
     try {
-      const user = await User.findOne({ where: { username } });
+      const user = await User.findOne({
+        where: {
+          [Op.or]: [{ username }, { email: username }],
+        },
+      });
       if (!user)
         await reply.view("login.ejs", {
           errorMsg: "Incorrect username or password",
@@ -31,10 +36,10 @@ export default {
   },
   signup: async (request, reply) => {
     const User = request.server.User;
-    const { username, password } = request.body;
+    const { username, email, password } = request.body;
 
     try {
-      const user = await User.findOne({ where: { username } });
+      const user = await User.findOne({ where: { email } });
       if (user) reply.view("signup.ejs", { errorMsg: "User already exists" });
 
       const salt = await bcrypt.genSalt(10);
@@ -42,6 +47,7 @@ export default {
 
       const newUser = await User.create({
         username,
+        email,
         password: hashedPassword,
         type: "local",
       });

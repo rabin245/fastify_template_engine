@@ -5,9 +5,10 @@ const userModel = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    type: DataTypes.STRING(255),
     username: DataTypes.STRING(255),
+    email: DataTypes.STRING(255),
     password: DataTypes.STRING(255),
+    type: DataTypes.STRING(255),
   });
 };
 

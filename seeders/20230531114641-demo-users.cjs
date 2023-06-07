@@ -9,6 +9,7 @@ module.exports = {
       {
         id: uuidv4(),
         username: "testuser1",
+        email: "testuser1@email.com",
         password: bcrypt.hashSync("password1", 10),
         type: "local",
         createdAt: new Date(),
@@ -17,6 +18,7 @@ module.exports = {
       {
         id: uuidv4(),
         username: "testuser2",
+        email: "testuser2@email.com",
         password: bcrypt.hashSync("password2", 10),
         type: "local",
         createdAt: new Date(),
@@ -25,6 +27,7 @@ module.exports = {
       {
         id: uuidv4(),
         username: "testuser3",
+        email: "testuser3@email.com",
         password: bcrypt.hashSync("password3", 10),
         type: "local",
         createdAt: new Date(),
