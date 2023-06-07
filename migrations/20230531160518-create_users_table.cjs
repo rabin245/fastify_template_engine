@@ -12,6 +12,10 @@ module.exports = {
       email: Sequelize.STRING(255),
       password: Sequelize.STRING(255),
       type: Sequelize.STRING(255),
+      otp: {
+        type: Sequelize.STRING(255),
+        defaultValue: null,
+      },
       createdAt: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
