@@ -9,6 +9,7 @@ module.exports = {
         primaryKey: true,
       },
       username: Sequelize.STRING(255),
+      email: Sequelize.STRING(255),
       password: Sequelize.STRING(255),
       type: Sequelize.STRING(255),
       createdAt: {
