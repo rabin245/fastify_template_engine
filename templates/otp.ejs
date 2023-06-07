@@ -1,0 +1,12 @@
+<div>
+  <h2>OTP</h2>
+  <form class="form" action="/auth/login/verify" method="POST">
+    <input class="inputfield" type="text" name="otp" placeholder="OTP" pattern="^[0-9]{6}$"
+      title="Must be at least two characters" />
+    <span class="form--error">
+      <%= errorMsg %>
+    </span>
+    <button class="auth-button" type="submit">Submit</button>
+  </form>
+  <p>Login again? <a href="/auth/login">Login</a></p>
+</div>
