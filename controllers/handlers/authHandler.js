@@ -19,8 +19,6 @@ export default {
         });
 
       request.session.userId = user.id;
-      const csrfToken = await reply.generateCsrf();
-      request.session.csrfToken = csrfToken;
 
       reply.redirect("/posts");
     } catch (error) {

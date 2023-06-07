@@ -11,9 +11,6 @@ export default async function (fastify, opts) {
         );
       request.session.token = token;
 
-      const csrfToken = await reply.generateCsrf();
-      request.session.csrfToken = csrfToken;
-
       reply.redirect("/auth/login/github/verifyAccessToken");
     } catch (err) {
       console.log(err);
@@ -65,9 +62,6 @@ export default async function (fastify, opts) {
         );
 
       request.session.token = token;
-
-      const csrfToken = await reply.generateCsrf();
-      request.session.csrfToken = csrfToken;
 
       reply.redirect("/auth/login/google/verifyAccessToken");
     } catch (error) {

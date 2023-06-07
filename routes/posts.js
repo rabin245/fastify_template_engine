@@ -4,7 +4,6 @@ import postsSchema from "../controllers/schemas/postsSchema.js";
 export default async function (fastify, opts) {
   const getPostsOption = {
     schema: postsSchema.getPosts,
-    onRequest: fastify.csrfProtection,
     preHandler: fastify.authenticate,
     handler: postsHandler.getPosts,
   };

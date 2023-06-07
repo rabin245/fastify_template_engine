@@ -1,22 +1,24 @@
 import authHandler from "../controllers/handlers/authHandler.js";
 
 export default async function (fastify, opts) {
-  const loginOption = {
-    schema: {
-      body: {
-        type: "object",
-        required: ["username", "password"],
-        properties: {
-          username: { type: "string", minLength: 2 },
-          password: { type: "string", minLength: 2 },
-        },
+  const authSchema = {
+    body: {
+      type: "object",
+      required: ["username", "password"],
+      properties: {
+        username: { type: "string", minLength: 2 },
+        password: { type: "string", minLength: 2 },
       },
     },
+  };
+
+  const loginOption = {
+    schema: authSchema,
     handler: authHandler.login,
   };
 
   const signupOption = {
-    schema: {},
+    schema: authSchema,
     handler: authHandler.signup,
   };
 

@@ -30,17 +30,12 @@ async function session(fastify, opts) {
 
   fastify.decorate("authenticate", async function (request, reply) {
     try {
-      console.log(
-        "testing for the userid in session \n",
-        request.session.userId
-      );
       if (!request.session.userId) {
         console.log("no userid found in session");
         throw new Error("No user logged in");
       }
       const User = request.server.User;
       const user = await User.findByPk(request.session.userId);
-      console.log("inside authenticate decorator", request.session.userId);
 
       if (!user) throw new Error("No such user exists");
 
@@ -51,7 +46,9 @@ async function session(fastify, opts) {
       console.log(error.message);
 
       if (error.message === "No user logged in")
-        reply.code(401).send({ error: "Unauthorized! No user logged in" });
+        await reply.view("login.ejs", {
+          errorMsg: error.message,
+        });
       else
         reply.code(500).send({
           error: "Internal Server Error",
