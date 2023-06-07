@@ -1,11 +1,16 @@
 import bcrypt from "bcrypt";
+import { Op } from "sequelize";
 
 export default {
   login: async (request, reply) => {
     const User = request.server.User;
     const { username, password } = request.body;
     try {
-      const user = await User.findOne({ where: { username } });
+      const user = await User.findOne({
+        where: {
+          [Op.or]: [{ username }, { email: username }],
+        },
+      });
       if (!user)
         await reply.view("login.ejs", {
           errorMsg: "Incorrect username or password",
