@@ -6,6 +6,15 @@
       <li><a href="/posts">Posts</a></li>
       <li><a href="/posts/me">My Posts</a></li>
       <li><a href="/posts/new">New Post</a></li>
+      <li>
+        <% if(isUserLoggedIn) { %>
+          <form class="logout-form" action="/auth/logout" method="post">
+            <button class="auth-button bg-red" type="submit">Logout</button>
+          </form>
+          <% } else { %>
+            <a href="/auth/login" class="auth-button">Login</a>
+            <% } %>
+      </li>
     </ul>
   </div>
 </div>

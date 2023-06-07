@@ -59,10 +59,9 @@ export default {
     try {
       if (!request.session.userId) throw new Error("No user logged in");
 
-      // destroys session in store
       await request.session.destroy();
 
-      reply.send({ message: "Logout Success" });
+      reply.redirect("/");
     } catch (error) {
       console.log(error.message);
 

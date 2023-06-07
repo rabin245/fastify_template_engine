@@ -89,6 +89,18 @@ async function session(fastify, opts) {
       });
     }
   });
+
+  fastify.addHook("preValidation", async (request, reply) => {
+    const isUserLoggedIn = request.session.userId;
+
+    reply.locals = reply.locals || {};
+    if (isUserLoggedIn) {
+      reply.locals.isUserLoggedIn = true;
+    } else {
+      reply.locals.isUserLoggedIn = false;
+    }
+    return;
+  });
 }
 
 export default fastifyPlugin(session);
