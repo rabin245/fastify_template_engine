@@ -26,17 +26,29 @@ export default async function (fastify, opts) {
     handler: authHandler.logout,
   };
 
-  fastify.get("/auth/login", async (req, reply) => {
-    await reply.view("login.ejs", {
-      errorMsg: "",
-    });
-  });
+  fastify.get(
+    "/auth/login",
+    {
+      onRequest: fastify.isLoggedIn,
+    },
+    async (req, reply) => {
+      await reply.view("login.ejs", {
+        errorMsg: "",
+      });
+    }
+  );
 
-  fastify.get("/auth/signup", async (req, reply) => {
-    await reply.view("signup.ejs", {
-      errorMsg: "",
-    });
-  });
+  fastify.get(
+    "/auth/signup",
+    {
+      onRequest: fastify.isLoggedIn,
+    },
+    async (req, reply) => {
+      await reply.view("signup.ejs", {
+        errorMsg: "",
+      });
+    }
+  );
 
   fastify.post("/auth/login", loginOption);
   fastify.post("/auth/signup", signupOption);
