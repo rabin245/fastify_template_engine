@@ -76,6 +76,19 @@ async function session(fastify, opts) {
         });
     }
   });
+
+  fastify.decorate("isLoggedIn", async function (request, reply) {
+    try {
+      if (request.session.userId) reply.redirect("/posts");
+      return;
+    } catch (error) {
+      console.log(error.message);
+      reply.code(500).send({
+        error: "Internal Server Error",
+        msg: error.message,
+      });
+    }
+  });
 }
 
 export default fastifyPlugin(session);
