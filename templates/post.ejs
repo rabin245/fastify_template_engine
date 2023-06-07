@@ -11,6 +11,12 @@
       alert("Something went wrong");
     }
   };
+
+  const handleEdit = async () => {
+    const postId = "<%= post.id %>";
+    window.location.href = `/posts/${postId}/edit`;
+  }
+
 </script>
 <div class="post-page">
   <h1 class="post--title">
@@ -21,6 +27,7 @@
       by <%= post.user.username %>
     </span>
     <% if (post.user.id===user.id) {%>
+      <button class="post--button" onclick="handleEdit()">Edit</button>
       <button class="post--button bg-red" onclick="handleDelete()">Delete</button>
       <% } %>
   </div>

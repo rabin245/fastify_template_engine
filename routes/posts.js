@@ -42,6 +42,11 @@ export default async function (fastify, opts) {
     handler: postsHandler.updatePost,
   };
 
+  const updatePostPageOption = {
+    preHandler: fastify.authenticate,
+    handler: postsHandler.updatePostPage,
+  };
+
   fastify.get("/posts", getPostsOption);
 
   fastify.get("/posts/:id", getPostsByIdOption);
@@ -54,5 +59,8 @@ export default async function (fastify, opts) {
 
   fastify.delete("/posts/:id", deletePostOption);
 
-  fastify.put("/posts/:id", updatePostOption);
+  fastify.get("/posts/:id/edit", updatePostPageOption);
+
+  // no put request method in html form tag
+  fastify.post("/posts/:id/edit", updatePostOption);
 }

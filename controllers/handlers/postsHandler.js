@@ -61,7 +61,7 @@ export default {
   },
   createPostPage: async (request, reply) => {
     await reply.view("createPost.ejs", {
-      post: { id: "", title: "", content: "" },
+      post: { id: "", title: "", content: "", userId: "" },
     });
   },
   createPost: async (request, reply) => {
@@ -86,12 +86,12 @@ export default {
       const post = await Post.findByPk(id, { include: User });
 
       if (!post) {
-        reply.code(404).send({ error: "Not Found" });
+        await reply.view("pageNotFound.ejs");
       }
 
       await post.destroy();
 
-      return post;
+      reply.redirect("/posts");
     } catch (error) {
       console.log(error);
       reply.code(500).send({ error: "Internal Server Error" });
@@ -106,12 +106,34 @@ export default {
       const post = await Post.findByPk(id, { include: User });
 
       if (!post) {
-        reply.code(404).send({ error: "Not Found" });
+        await reply.view("pageNotFound.ejs");
       }
 
       await post.update({ title, content });
 
-      return post;
+      reply.redirect("/posts/" + id);
+    } catch (error) {
+      console.log(error);
+      reply.code(500).send({ error: "Internal Server Error" });
+    }
+  },
+  updatePostPage: async (request, reply) => {
+    const Post = request.server.Post;
+    const User = request.server.User;
+    const { id } = request.params;
+    try {
+      const post = await Post.findByPk(id, { include: User });
+
+      if (!post) await reply.view("pageNotFound.ejs");
+
+      await reply.view("createPost.ejs", {
+        post: {
+          id: id,
+          title: post.title,
+          content: post.content,
+          userId: post.userId,
+        },
+      });
     } catch (error) {
       console.log(error);
       reply.code(500).send({ error: "Internal Server Error" });
