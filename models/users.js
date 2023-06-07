@@ -9,6 +9,10 @@ const userModel = (sequelize, DataTypes) => {
     email: DataTypes.STRING(255),
     password: DataTypes.STRING(255),
     type: DataTypes.STRING(255),
+    otp: {
+      type: DataTypes.STRING(255),
+      defaultValue: null,
+    },
   });
 };
 

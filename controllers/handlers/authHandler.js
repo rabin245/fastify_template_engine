@@ -5,6 +5,8 @@ export default {
   login: async (request, reply) => {
     const User = request.server.User;
     const { username, password } = request.body;
+    const mailer = request.server.mailer;
+
     try {
       const user = await User.findOne({
         where: {
@@ -12,20 +14,37 @@ export default {
         },
       });
       if (!user)
-        await reply.view("login.ejs", {
+        return await reply.view("login.ejs", {
           errorMsg: "Incorrect username or password",
         });
 
       const match = await bcrypt.compare(password, user.password);
 
       if (!match)
-        await reply.view("login.ejs", {
+        return await reply.view("login.ejs", {
           errorMsg: "Incorrect username or password",
         });
 
-      request.session.userId = user.id;
+      const otp = Math.floor(100000 + Math.random() * 900000);
 
-      reply.redirect("/posts");
+      await user.update({ otp });
+
+      mailer.sendMail({
+        to: user.email,
+        subject: "Single-use code for EJS Posts",
+        html: `
+          <p>Hi ${user.username},</p>
+          
+          <p>Your OTP for login is <b>${otp}</b></p>
+
+          <p>Regards,</p>
+          <p>EJS Posts Team</p>
+          `,
+      });
+
+      request.session.userEmail = user.email;
+
+      reply.redirect("/auth/login/verify");
     } catch (error) {
       console.log(error);
       reply.code(500).send({
@@ -38,18 +57,36 @@ export default {
     const User = request.server.User;
     const { username, email, password } = request.body;
 
+    const mailer = request.server.mailer;
+
     try {
       const user = await User.findOne({ where: { email } });
-      if (user) reply.view("signup.ejs", { errorMsg: "User already exists" });
+      if (user)
+        return await reply.view("signup.ejs", {
+          errorMsg: "User already exists",
+        });
 
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
 
-      const newUser = await User.create({
+      await User.create({
         username,
         email,
         password: hashedPassword,
         type: "local",
+      });
+
+      mailer.sendMail({
+        to: email,
+        subject: "Welcome to EJS Posts",
+        html: `
+          <p>Hi ${username},</p>
+          
+          <p>Thank you for signing up to EJS Posts. If you did not sign up, please ignore this email.</p>
+
+          <p>Regards,</p>
+          <p>EJS Posts Team</p>
+          `,
       });
 
       reply.redirect("/auth/login");
