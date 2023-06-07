@@ -25,6 +25,11 @@ export default async function (fastify, opts) {
     handler: postsHandler.createPost,
   };
 
+  const createPostPageOption = {
+    preHandler: fastify.authenticate,
+    handler: postsHandler.createPostPage,
+  };
+
   const deletePostOption = {
     schema: postsSchema.deletePost,
     preHandler: [fastify.authenticate, fastify.authorize],
@@ -42,6 +47,8 @@ export default async function (fastify, opts) {
   fastify.get("/posts/:id", getPostsByIdOption);
 
   fastify.get("/posts/me", getPostsByUserOption);
+
+  fastify.get("/posts/new", createPostPageOption);
 
   fastify.post("/posts", createPostOption);
 

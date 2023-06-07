@@ -59,6 +59,11 @@ export default {
       reply.code(500).send({ error: "Internal Server Error" });
     }
   },
+  createPostPage: async (request, reply) => {
+    await reply.view("createPost.ejs", {
+      post: { id: "", title: "", content: "" },
+    });
+  },
   createPost: async (request, reply) => {
     const Post = request.server.Post;
     const { title, content } = request.body;
@@ -67,7 +72,7 @@ export default {
     try {
       const post = await Post.create({ title, content, userId });
 
-      return post;
+      reply.redirect("/posts");
     } catch (error) {
       console.log(error);
       reply.code(500).send({ error: "Internal Server Error" });

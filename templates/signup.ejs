@@ -1,11 +1,11 @@
 <div>
   <h2>Signup</h2>
-  <form class="auth-form" action="/auth/signup" method="POST">
+  <form class="form" action="/auth/signup" method="POST">
     <input class="inputfield" type="text" name="username" placeholder="Username" pattern="^[A-Za-z0-9]{2,}$"
       title="Must be at least two characters" />
     <input class="inputfield" type="password" name="password" placeholder="Password" pattern="^[A-Za-z0-9_%+-]{2,}$"
       title="Must be at least two characters" />
-    <span class="auth-form--error">
+    <span class="form--error">
       <%= errorMsg %>
     </span>
     <button class="auth-button" type="submit">Signup</button>

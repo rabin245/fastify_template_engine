@@ -48,7 +48,14 @@ export default {
     },
   },
   createPost: {
-    body: postJsonBodySchema,
+    body: {
+      type: "object",
+      required: ["title"],
+      properties: {
+        title: { type: "string" },
+        content: { type: "string" },
+      },
+    },
     response: {
       200: postSchema,
     },
