@@ -9,7 +9,7 @@ export default {
       });
 
       if (posts.length === 0) {
-        reply.view("posts.ejs", { posts });
+        return await reply.view("posts.ejs", { posts });
       }
       await reply.view("posts.ejs", { posts });
     } catch (error) {
@@ -28,7 +28,7 @@ export default {
       });
 
       if (!post) {
-        await reply.view("pageNotFound.ejs");
+        return await reply.view("pageNotFound.ejs");
       }
 
       await reply.view("post.ejs", { post, user: request.user });
@@ -50,7 +50,7 @@ export default {
       });
 
       if (posts.length === 0) {
-        reply.view("posts.ejs", { posts });
+        return await reply.view("posts.ejs", { posts });
       }
 
       await reply.view("posts.ejs", { posts });
@@ -86,7 +86,7 @@ export default {
       const post = await Post.findByPk(id, { include: User });
 
       if (!post) {
-        await reply.view("pageNotFound.ejs");
+        return await reply.view("pageNotFound.ejs");
       }
 
       await post.destroy();
@@ -106,7 +106,7 @@ export default {
       const post = await Post.findByPk(id, { include: User });
 
       if (!post) {
-        await reply.view("pageNotFound.ejs");
+        return await reply.view("pageNotFound.ejs");
       }
 
       await post.update({ title, content });
@@ -124,7 +124,7 @@ export default {
     try {
       const post = await Post.findByPk(id, { include: User });
 
-      if (!post) await reply.view("pageNotFound.ejs");
+      if (!post) return await reply.view("pageNotFound.ejs");
 
       await reply.view("createPost.ejs", {
         post: {
