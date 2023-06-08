@@ -41,14 +41,21 @@ export default async function (fastify, opts) {
         const { login, id } = response.data.user;
         const username = `${login}:${id}`;
 
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(id, salt);
+
         const user = await fastify.User.findOrCreate({
           where: { username: username },
-          defaults: { username: username, password: id, type: "github" },
+          defaults: {
+            username: username,
+            password: hashedPassword,
+            type: "github",
+          },
         });
 
         request.session.userId = user[0].id;
 
-        reply.send(response.data);
+        reply.redirect("/posts");
       } catch (error) {
         reply.send(error);
       }
