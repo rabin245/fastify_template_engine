@@ -249,20 +249,40 @@ ul.nav li a:hover {
   max-width: 500px;
 }
 
-.google-login-button {
+.auth-login-button {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem;
   color: white;
   border-radius: 4px;
-  border: solid 1px #fd5d88;
   outline: none;
+}
+
+.google-login-button {
+  border: solid 1px #fd5d88;
 }
 
 .google-login-button:hover {
   background-color: #fd5d88;
   color: white;
+}
+
+.github-login-button {
+  border: solid 1px white;
+}
+
+.github-login-button:hover {
+  background-color: rgba(128, 128, 128, 0.4);
+  color: white;
+}
+
+.github-login-button > img {
+  filter: invert(100%);
+}
+
+.github-login-button:hover > img {
+  filter: invert(0%);
 }
 
 .or-separator {
