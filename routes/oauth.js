@@ -1,6 +1,7 @@
 import axios from "axios";
 import dotenv from "dotenv";
 dotenv.config();
+import bcrypt from "bcrypt";
 
 export default async function (fastify, opts) {
   fastify.get("/auth/login/github/callback", async (request, reply) => {
@@ -84,17 +85,26 @@ export default async function (fastify, opts) {
           }
         );
 
-        const { given_name, family_name, id } = response.data;
+        const { given_name, family_name, id, email } = response.data;
+
         const username = `${given_name}_${family_name}:${id}`;
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(id, salt);
 
         const user = await fastify.User.findOrCreate({
           where: { username: username },
-          defaults: { username: username, password: id, type: "google" },
+          defaults: {
+            username: username,
+            password: hashedPassword,
+            type: "google",
+            email: email,
+          },
         });
 
         request.session.userId = user[0].id;
 
-        reply.send(response.data);
+        reply.redirect("/posts");
       } catch (error) {
         reply.send(error);
       }
