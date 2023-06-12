@@ -127,4 +127,164 @@ export default {
         });
     }
   },
+  forgotPassword: async (request, reply) => {
+    const mailer = request.server.mailer;
+
+    try {
+      const User = request.server.User;
+      const { email } = request.body;
+
+      const user = await User.findOne({
+        where: {
+          [Op.and]: [
+            {
+              email,
+            },
+            {
+              type: "local",
+            },
+          ],
+        },
+      });
+
+      if (!user)
+        return await reply.view("forgotPassword.ejs", {
+          errorMsg: "No user associated with the email",
+        });
+
+      const token = request.server.jwt.sign(
+        {
+          id: user.id,
+          email: user.email,
+        },
+        {
+          expiresIn: "10m",
+        }
+      );
+
+      const resetLink = `http://localhost:3000/auth/forgot-password/reset?token=${token}`;
+
+      const templatePath = path.join(
+        __dirname,
+        "../../templates/mail/forgotPassword.ejs"
+      );
+      const template = await fs.readFile(templatePath, "utf-8");
+      const compiledTemplate = ejs.render(template, {
+        receiver: user.username,
+        email: user.email,
+        link: resetLink,
+      });
+
+      mailer.sendMail({
+        to: user.email,
+        subject: "EJS Posts - Reset Password",
+        html: compiledTemplate,
+      });
+
+      request.session.resetEmail = user.email;
+
+      reply.redirect("/auth/forgot-password/verify");
+    } catch (error) {
+      console.log(error);
+      reply.code(500).send({
+        error: "Internal Server Error",
+        msg: error.message,
+      });
+    }
+  },
+  forgotPasswordReset: async (request, reply) => {
+    try {
+      const { token } = request.query;
+
+      if (!token) throw new Error("No token provided");
+
+      const { id, email } = request.server.jwt.verify(token);
+
+      if (!id || !email) throw new Error("Invalid token");
+
+      const User = request.server.User;
+
+      const user = await User.findOne({
+        where: {
+          [Op.and]: [
+            {
+              id,
+            },
+            {
+              email,
+            },
+          ],
+        },
+      });
+
+      if (!user) throw new Error("Invalid token");
+
+      request.session.resetToken = token;
+      request.session.resetEmail = user.email;
+      request.session.resetId = user.id;
+
+      reply.redirect("/auth/forgot-password/reset-password");
+    } catch (error) {
+      console.log(error);
+      reply.code(500).send({
+        error: "Internal Server Error",
+        msg: error.message,
+      });
+    }
+  },
+  forgotPasswordResetPassword: async (request, reply) => {
+    try {
+      const { token, password } = request.body;
+
+      if (!token) throw new Error("No token provided");
+
+      const { id, email } = request.server.jwt.verify(token);
+
+      if (
+        !id ||
+        !email ||
+        id !== request.session.resetId ||
+        email !== request.session.resetEmail
+      )
+        throw new Error("Invalid token");
+
+      const User = request.server.User;
+
+      const user = await User.findOne({
+        where: {
+          [Op.and]: [
+            {
+              id,
+            },
+            {
+              email,
+            },
+          ],
+        },
+      });
+
+      if (!user)
+        return await reply.view("forgotPasswordReset.ejs", {
+          errorMsg: "Invalid token",
+          token: token,
+        });
+
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+
+      await user.update({
+        password: hashedPassword,
+      });
+
+      await request.session.destroy();
+
+      reply.redirect("/auth/login");
+    } catch (error) {
+      console.log(error);
+      reply.code(500).send({
+        error: "Internal Server Error",
+        msg: error.message,
+      });
+    }
+  },
 };
