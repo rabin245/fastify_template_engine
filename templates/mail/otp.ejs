@@ -14,10 +14,13 @@
   </b>.
 </p>
 
-<div style="display: flex; align-items: center; justify-content: center; margin: 1rem 0; width: 100%;">
+<div style="display: table; margin: 1rem 0; width: 100%;">
   <span
-    style="background-color: #31a2ed; border-radius: 5px; padding: 0.8rem; font-size: 1.5rem; font-weight: bolder; color: white; letter-spacing: 3px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.25); user-select: all; -webkit-user-select: all;">
-    <%= otp %>
+    style="user-select: all; -webkit-user-select: all; display: table-cell; vertical-align: middle; text-align: center;">
+    <span
+      style="background-color: #31a2ed; border-radius: 5px; padding: 0.8rem; font-size: 1.5rem; font-weight: bolder; color: white; letter-spacing: 3px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);">
+      <%= otp %>
+    </span>
   </span>
 </div>
 
