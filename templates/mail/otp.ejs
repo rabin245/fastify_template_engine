@@ -1,0 +1,31 @@
+<h2 style="color: gray; margin: 0; font-weight: 400;">
+  EJS Posts
+</h2>
+<h1 style="color: #3173ED; margin: 0; margin-bottom: 1rem;">
+  Security code
+</h1>
+
+<p style="font-size: 16px; line-height: 1.5; margin: 0 0 16px;">Hi <%= receiver %>,</p>
+
+<p style="font-size: 16px; line-height: 1.5; margin: 0 0 16px;">
+  Please use the following security code for the account
+  <b>
+    <%= email %>
+  </b>.
+</p>
+
+<div style="display: table; margin: 1rem 0; width: 100%;">
+  <span
+    style="user-select: all; -webkit-user-select: all; display: table-cell; vertical-align: middle; text-align: center;">
+    <span
+      style="background-color: #31a2ed; border-radius: 5px; padding: 0.8rem; font-size: 1.5rem; font-weight: bolder; color: white; letter-spacing: 3px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);">
+      <%= otp %>
+    </span>
+  </span>
+</div>
+
+<p style="font-size: 16px; line-height: 1.5; margin: 0 0 16px;">
+  If you did not sign up, please ignore this email.
+</p>
+
+<p style="font-size: 16px; line-height: 1.5;">Regards,<br />EJS Posts Team</p>
