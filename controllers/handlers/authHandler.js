@@ -1,5 +1,12 @@
 import bcrypt from "bcrypt";
 import { Op } from "sequelize";
+import fs from "fs/promises";
+import { fileURLToPath } from "url";
+import path from "path";
+import ejs from "ejs";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export default {
   login: async (request, reply) => {
@@ -29,17 +36,18 @@ export default {
 
       await user.update({ otp });
 
+      const templatePath = path.join(__dirname, "../../templates/mail/otp.ejs");
+      const template = await fs.readFile(templatePath, "utf-8");
+      const compiledTemplate = ejs.render(template, {
+        receiver: username,
+        otp,
+        email: user.email,
+      });
+
       mailer.sendMail({
         to: user.email,
         subject: "Single-use code for EJS Posts",
-        html: `
-          <p>Hi ${user.username},</p>
-          
-          <p>Your OTP for login is <b>${otp}</b></p>
-
-          <p>Regards,</p>
-          <p>EJS Posts Team</p>
-          `,
+        html: compiledTemplate,
       });
 
       request.session.userEmail = user.email;
@@ -76,17 +84,19 @@ export default {
         type: "local",
       });
 
+      const templatePath = path.join(
+        __dirname,
+        "../../templates/mail/welcome.ejs"
+      );
+      const template = await fs.readFile(templatePath, "utf-8");
+      const compiledTemplate = ejs.render(template, {
+        receiver: username,
+      });
+
       mailer.sendMail({
         to: email,
         subject: "Welcome to EJS Posts",
-        html: `
-          <p>Hi ${username},</p>
-          
-          <p>Thank you for signing up to EJS Posts. If you did not sign up, please ignore this email.</p>
-
-          <p>Regards,</p>
-          <p>EJS Posts Team</p>
-          `,
+        html: compiledTemplate,
       });
 
       reply.redirect("/auth/login");
