@@ -22,4 +22,40 @@ export default {
       },
     },
   },
+  forgotPassword: {
+    body: {
+      type: "object",
+      required: ["email"],
+      properties: {
+        email: {
+          type: "string",
+        },
+      },
+    },
+  },
+  forgotPasswordReset: {
+    querystring: {
+      type: "object",
+      required: ["token"],
+      properties: {
+        token: {
+          type: "string",
+        },
+      },
+    },
+  },
+  forgotPasswordResetPassword: {
+    body: {
+      type: "object",
+      required: ["password", "token"],
+      properties: {
+        password: {
+          type: "string",
+        },
+        token: {
+          type: "string",
+        },
+      },
+    },
+  },
 };
